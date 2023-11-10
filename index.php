@@ -40,9 +40,7 @@ $selected_session = $_GET[$SELECTED_SESSION] ?? $ALL;
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css"/>
 </head>
-<body class="container py-3">
-
-<h1>Grading System</h1>
+<body class="container py-3 d-flex align-content-center flex-column">
 
 <!-- Generate grade submission text boxes -->
 <form action="/" method="GET" class="d-flex flex-column my-3">
@@ -58,10 +56,15 @@ $selected_session = $_GET[$SELECTED_SESSION] ?? $ALL;
 </form>
 
 <?php include "add_grade.php" ?>
-<?php include "view_grades.php" ?>
+<?php
+    if ($sessions != 0) {
+        include "view_grades.php";
+        include 'stats_session.php';
+        include "stats_sections.php";
+    }
+?>
 
-<?php include 'stats_session.php' ?>
-<?php include "stats_sections.php" ?>
+
 
 <!-- Script loading -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
