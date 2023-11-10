@@ -1,5 +1,5 @@
 <?php
-include 'config.php';
+include 'db.php';
 global $cn, $sessions;
 
 // Function to fetch a single value from the database
@@ -39,13 +39,13 @@ $lowest_score = fetchSingleValue("SELECT MIN(Grade) FROM grades");
     <div class="my-5">
         <h2>Statistics for all sections</h2>
         <table class="table table-striped table-hover">
-            <thead>
+            <thead class="table-dark">
             <tr>
                 <th>Name</th>
                 <th>Value</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody class="table-group-divider">
             <tr>
                 <td>
                     Highest Exam Grade (All Sections)

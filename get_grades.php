@@ -1,6 +1,7 @@
 <?php
-include 'config.php';
-global $ALL, $sessions, $GRADES_TABLE, $GRADES, $FILTER_SESSION, $cn, $DELETE;
+global $sessions;
+include 'db.php';
+global $ALL, $FILTER_SESSION, $cn, $DELETE;
 
 function handleDelete($filter)
 {
@@ -17,57 +18,37 @@ function getFilteredGrades($filter)
     return $cn->query($sql);
 }
 
-?>
-
-<?php
 $filter = $_GET[$FILTER_SESSION] ?? $ALL;
 
-if (isset($_GET[$DELETE])) {
-    handleDelete($filter);
-}
+if (isset($_GET[$DELETE])) handleDelete($filter);
 
 $rs = getFilteredGrades($filter);
 ?>
 
 <?php if ($sessions != 0): ?>
     <div class="d-flex my-3">
-        <!-- Dropdown for selecting Session -->
-        <form action="/" method="GET">
-            <label>Session: </label>
-            <label>
-                <select class="form-select" name="<?= $FILTER_SESSION ?>">
-                    <?php if ($filter == $ALL): ?>
-                        <option name="<?= $ALL ?>" value="<?= $ALL ?>" selected>All Sessions</option>
-                    <?php else: ?>
-                        <option name="<?= $ALL ?>" value="<?= $ALL ?>">All Sessions</option>
-                    <?php endif; ?>
-                    <?php for ($k = 1; $k <= $sessions; $k++): ?>
-                        <?php if ($k == $filter): ?>
-                            <option name="<?= $k ?>" value="<?= $k ?>" selected><?= $k ?></option>
-                        <?php else: ?>
-                            <option name="<?= $k ?>" value="<?= $k ?>"><?= $k ?></option>
-                        <?php endif; ?>
-                    <?php endfor ?>
-                </select>
-            </label>
-            <button class="btn btn-primary" type="submit">Filter</button>
+        <form action="/" method="GET" class="input-group mb-3">
+            <label class="input-group-text">Session</label>
+            <select class="form-select" name="<?= $FILTER_SESSION ?>">
+                <option name="<?= $ALL ?>" value="<?= $ALL ?>" <?= $filter == $ALL ? 'selected' : '' ?>>All Sessions
+                </option>
+                <?php for ($k = 1; $k <= $sessions; $k++): ?>
+                    <option name="<?= $k ?>" value="<?= $k ?>" <?= $k == $filter ? 'selected' : '' ?>><?= $k ?></option>
+                <?php endfor ?>
+            </select>
+            <button class="btn btn-primary" type="submit">Apply Filter</button>
         </form>
         <form action="/" method="GET" class="ms-2">
             <input name="delete" value="true" style="display: none">
             <input name="filter_session" value="<?= $filter ?>" style="display: none">
             <button class="btn btn-danger" type="submit">
-                <?php if ($filter == $ALL): ?>
-                    Delete all sessions
-                <?php else: ?>
-                    Delete session <?= $filter ?>
-                <?php endif; ?>
+                <?= $filter == $ALL ? 'Delete all sessions' : 'Delete session ' . $filter ?>
             </button>
         </form>
     </div>
 
-    <!-- Grade Table -->
     <table class="table table-striped table-hover rounded-4" id="<?= $GRADES_TABLE ?>">
-        <thead>
+        <thead class="table-dark">
         <tr>
             <th>No</th>
             <th>Name</th>
@@ -77,18 +58,17 @@ $rs = getFilteredGrades($filter);
             <th>Session</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody class="table-group-divider">
         <?php $count = 1 ?>
         <?php while ($row = $rs->fetch_assoc()): ?>
             <tr>
-                <td><?= $count ?></td>
+                <td><?= $count++ ?></td>
                 <td><?= $row['Name'] ?></td>
                 <td><?= $row['Section'] ?></td>
                 <td><?= $row['Subject'] ?></td>
                 <td><?= $row['Grade'] ?>%</td>
                 <td><?= $row['Session'] ?></td>
             </tr>
-            <?php $count++ ?>
         <?php endwhile; ?>
         </tbody>
     </table>

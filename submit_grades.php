@@ -1,5 +1,5 @@
 <?php
-include 'config.php';
+include 'db.php';
 global $cn, $student_amt, $section_amt, $subject, $next_session;
 global $SUBMIT_GRADES, $NEXT_SESSION;
 
@@ -25,9 +25,9 @@ function renderGradeForm($subject, $section_amt, $student_amt)
 {
     global $SUBMIT_GRADES;
     if (isset($subject) && isset($section_amt) && isset($student_amt)): ?>
-        <form method="POST" class="my-5">
+        <form method="POST" class="mb-5">
             <table class="table table-striped table-hover">
-                <thead>
+                <thead class="table-dark">
                 <tr>
                     <th>Student Name</th>
                     <th>Subject</th>
@@ -46,8 +46,8 @@ function renderGradeForm($subject, $section_amt, $student_amt)
                             </td>
                             <td>
                                 <div class="input-group">
-                                    <span class="input-group-text">Grade for <?= $student_name ?></span>
-                                    <input name="<?= $student_name ?>" class="form-control" type="number" required />
+                                    <span class="input-group-text"><?= $student_name ?></span>
+                                    <input name="<?= $student_name ?>" class="form-control" type="number" required/>
                                 </div>
                             </td>
                         </tr>
@@ -55,7 +55,7 @@ function renderGradeForm($subject, $section_amt, $student_amt)
                 <?php endfor; ?>
             </table>
             <input class="" name="<?= $SUBMIT_GRADES ?>" style="display: none" value="true">
-            <div class="d-grid">
+            <div class="d-flex">
                 <button class="btn btn-success" type="submit">SAVE GRADES</button>
             </div>
         </form>

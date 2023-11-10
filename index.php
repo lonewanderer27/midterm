@@ -1,6 +1,6 @@
 <?php
 global $cn;
-include "config.php";
+include "db.php";
 
 // Constants
 $STUDENT_AMT = "student_amt";
@@ -42,28 +42,47 @@ $selected_session = $_GET[$SELECTED_SESSION] ?? $ALL;
 </head>
 <body class="container py-3 d-flex align-content-center flex-column">
 
-<!-- Generate grade submission text boxes -->
-<form action="/" method="GET" class="d-flex flex-column my-3">
-    <input class="form-control mb-2" type="text" name="<?= $SUBJECT ?>" placeholder="Enter subject name"
-           value="<?= $subject ?>" required>
-    <input class="form-control mb-2" min="1" type="number" name="<?= $SECTION_AMT ?>"
-           placeholder="Enter number of sections"
-           value="<?= $section_amt ?>" required>
-    <input class="form-control mb-2" min="1" type="number" name="<?= $STUDENT_AMT ?>"
-           placeholder="Enter number of students per section"
-           value="<?= $student_amt ?>" required>
-    <button class="btn btn-dark" type="submit">GENERATE</button>
-</form>
+<div class="row">
+    <div class="col-6">
+        <!-- Generate grade submission text boxes -->
+        <form action="/" method="GET" class="d-flex flex-column my-3">
+            <div class="input-group mb-3">
+                <span class="input-group-text">Subject name</span>
+                <input class="form-control" type="text" name="<?= $SUBJECT ?>"
+                       value="<?= $subject ?>" required>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Number of sections</span>
+                <input class="form-control" min="1" type="number" name="<?= $SECTION_AMT ?>"
+                       value="<?= $section_amt ?>" required>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Number of students per section</span>
+                <input class="form-control" min="1" type="number" name="<?= $STUDENT_AMT ?>"
+                       value="<?= $student_amt ?>" required>
+            </div>
+            <div class="d-flex justify-content-right">
+                <button class="btn btn-dark" type="submit">GENERATE INPUTS</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-6">
+        <?php include "submit_grades.php" ?>
+    </div>
+</div>
 
-<?php include "add_grade.php" ?>
-<?php
-    if ($sessions != 0) {
-        include "view_grades.php";
-        include 'stats_session.php';
-        include "stats_sections.php";
-    }
-?>
 
+<?php if ($sessions != 0): ?>
+    <?php include 'get_grades.php' ?>
+    <div class="row">
+        <div class="col-6">
+            <?php include "stats_sections.php"; ?>
+        </div>
+        <div class="col-6">
+            <?php include "stats_session.php"; ?>
+        </div>
+    </div>
+<?php endif; ?>
 
 
 <!-- Script loading -->

@@ -1,5 +1,5 @@
 <?php
-include 'config.php';
+include 'db.php';
 global $cn, $ALL, $sessions;
 
 function fetchExamScores($selectedSession) {
@@ -51,7 +51,7 @@ if ($sessions != 0): ?>
             <?= ($selectedSession == $ALL) ? 'all sessions' : "Session $selectedSession" ?>
         </h2>
         <table class="table table-striped table-hover">
-            <thead>
+            <thead class="table-dark">
             <tr>
                 <th>Section</th>
                 <th>Average Grade</th>
@@ -59,7 +59,7 @@ if ($sessions != 0): ?>
                 <th>Lowest Grade</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody class="table-group-divider">
             <?php
             $statistics = calculateStatistics($scores);
             foreach ($statistics['average'] as $section => $average): ?>
