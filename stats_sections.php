@@ -1,25 +1,38 @@
 <?php
-include 'db.php';
-include 'constants.php';
+include 'config.php';
 global $cn, $sessions;
 
-$mean = $cn->query("SELECT AVG(Grade) FROM grades")->fetch_row()[0] ?? 0;
-$mode = $cn->query("SELECT Grade FROM grades GROUP BY Grade ORDER BY COUNT(*) DESC LIMIT 1")->fetch_row()[0] ?? 0;
+// Function to fetch a single value from the database
+function fetchSingleValue($query): float
+{
+    $result = $GLOBALS['cn']->query($query)->fetch_row();
+    return ($result !== null) ? $result[0] : 0;
+}
+
+// Function to calculate the median from an array of grades
+function calculateMedian($grades_array): float
+{
+    $length = count($grades_array);
+    return ($length % 2 === 0)
+        ? ($grades_array[($length / 2) - 1] + $grades_array[$length / 2]) / 2
+        : $grades_array[(int)($length / 2)];
+}
+
+$mean = fetchSingleValue("SELECT AVG(Grade) FROM grades");
+$mode = fetchSingleValue("SELECT Grade FROM grades GROUP BY Grade ORDER BY COUNT(*) DESC LIMIT 1");
 
 $grades = $cn->query("SELECT Grade FROM grades");
-$grades_array[] = [];
+$grades_array = [];
 while ($row = $grades->fetch_assoc()) {
     $grades_array[] = $row['Grade'];
 }
 sort($grades_array);
-$length = count($grades_array);
-$median = ($length % 2 === 0)
-    ? ($grades_array[($length / 2) - 1] + $grades_array[$length / 2]) / 2
-    : $grades_array[(int)($length / 2)];
 
-$average_score = $cn->query("SELECT AVG(Grade) FROM grades")->fetch_row()[0] ?? 0;
-$highest_score = $cn->query("SELECT MAX(Grade) FROM grades")->fetch_row()[0] ?? 0;
-$lowest_score = $cn->query("SELECT MIN(Grade) FROM grades")->fetch_row()[0] ?? 0;
+$median = calculateMedian($grades_array);
+
+$average_score = fetchSingleValue("SELECT AVG(Grade) FROM grades");
+$highest_score = fetchSingleValue("SELECT MAX(Grade) FROM grades");
+$lowest_score = fetchSingleValue("SELECT MIN(Grade) FROM grades");
 ?>
 
 <?php if ($sessions != 0): ?>
@@ -38,7 +51,7 @@ $lowest_score = $cn->query("SELECT MIN(Grade) FROM grades")->fetch_row()[0] ?? 0
                     Highest Exam Grade (All Sections)
                 </td>
                 <td>
-                    <?php echo $highest_score; ?>%
+                    <?= $highest_score; ?>%
                 </td>
             </tr>
             <tr>
@@ -46,7 +59,7 @@ $lowest_score = $cn->query("SELECT MIN(Grade) FROM grades")->fetch_row()[0] ?? 0
                     Lowest Exam Grade (All Sections)
                 </td>
                 <td>
-                    <?php echo $lowest_score; ?>%
+                    <?= $lowest_score; ?>%
                 </td>
             </tr>
             <tr>
@@ -54,7 +67,7 @@ $lowest_score = $cn->query("SELECT MIN(Grade) FROM grades")->fetch_row()[0] ?? 0
                     Average Exam Grade (All Sections)
                 </td>
                 <td>
-                    <?php echo round($average_score, 2); ?>%
+                    <?= round($average_score, 2); ?>%
                 </td>
             </tr>
             <tr>
@@ -62,7 +75,7 @@ $lowest_score = $cn->query("SELECT MIN(Grade) FROM grades")->fetch_row()[0] ?? 0
                     Median (Most Frequent Grade)
                 </td>
                 <td>
-                    <?php echo $median; ?>%
+                    <?= $median; ?>%
                 </td>
             </tr>
             <tr>
@@ -70,7 +83,7 @@ $lowest_score = $cn->query("SELECT MIN(Grade) FROM grades")->fetch_row()[0] ?? 0
                     Mode (Middle Score)
                 </td>
                 <td>
-                    <?php echo $mode; ?>%
+                    <?= $mode; ?>%
                 </td>
             </tr>
             </tbody>

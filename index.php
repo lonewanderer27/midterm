@@ -1,32 +1,45 @@
 <?php
-include "db.php";
 global $cn;
+include "config.php";
 
-include "constants.php";
-global $STUDENT_AMT, $SUBJECT, $SECTION_AMT, $GRADES, $GRADES_TABLE, $all;
-global $SELECTED_SESSION;
-global $SUBMIT_GRADES;
+// Constants
+$STUDENT_AMT = "student_amt";
+$SUBJECT = "subject";
+$SECTION_AMT = "section_amt";
+$NEXT_SESSION = "next_session";
+$SELECTED_SESSION = "selected_session";
+$GRADES_TABLE = "#grades_table";
 
-// fetch student_amt, section_amt & subject from the url
+// Forms tags
+$SUBMIT_GRADES = "submit_grades";
+$FILTER_SESSION = "filter_session";
+$ALL = "all";
+$DELETE = "delete";
+
+// Fetch inputs from the URL
 $student_amt = $_GET[$STUDENT_AMT] ?? null;
 $subject = $_GET[$SUBJECT] ?? null;
 $section_amt = $_GET[$SECTION_AMT] ?? null;
 
-// fetch the number of sessions
+// Fetch the number of sessions
 $sql = "SELECT MAX(Session) FROM grades;";
 $sessions = intval($cn->query($sql)->fetch_row()[0]);
 
-// next session to be added to the db
+// Next session to be added to the database
 $next_session = $sessions + 1;
 
-// selected session to be viewed by the user
-$selected_session = $_GET[$SELECTED_SESSION] ?? $all;
+// Selected session to be viewed by the user
+$selected_session = $_GET[$SELECTED_SESSION] ?? $ALL;
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
-<?php include "head.php" ?>
+<head>
+    <title>Grades Stats</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css"/>
+</head>
 <body class="container py-3">
 
 <h1>Grading System</h1>
@@ -44,10 +57,24 @@ $selected_session = $_GET[$SELECTED_SESSION] ?? $all;
     <button class="btn btn-primary" type="submit">GENERATE</button>
 </form>
 
-<?php include "grade_submission.php" ?>
-<?php include "grade_table_viewer.php" ?>
+<?php include "add_grade.php" ?>
+<?php include "view_grades.php" ?>
 
-<?php include 'stats_one_session.php' ?>
-<?php include "stats_all_sections.php" ?>
+<?php include 'stats_session.php' ?>
+<?php include "stats_sections.php" ?>
+
+<!-- Script loading -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+<script>
+    $(document).ready(() => {
+        // Initialize jQuery DataTable
+        $('<?= $GRADES_TABLE ?>').DataTable();
+    })
+</script>
+
 </body>
 </html>

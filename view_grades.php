@@ -1,30 +1,32 @@
 <?php
-include 'db.php';
-include 'constants.php';
+include 'config.php';
 global $ALL, $sessions, $GRADES_TABLE, $GRADES, $FILTER_SESSION, $cn, $DELETE;
 
-$filter = $_GET[$FILTER_SESSION] ?? $ALL;
-
-if (isset($_GET[$DELETE])) {
-    $sql = '';
-    if ($filter != $ALL) {
-        $sql = "DELETE FROM grades WHERE Session=$filter";
-    } else {
-        $sql = "DELETE FROM grades";
-    }
+function handleDelete($filter)
+{
+    global $cn, $ALL;
+    $sql = ($filter != $ALL) ? "DELETE FROM grades WHERE Session=$filter" : "DELETE FROM grades";
     $cn->query($sql);
     header("location:index.php");
 }
 
-$sql = '';
-if ($filter != $ALL) {
-    $sql = "SELECT * FROM grades WHERE Session=$filter";
-} else {
-    $sql = "SELECT * FROM grades";
+function getFilteredGrades($filter)
+{
+    global $ALL, $cn;
+    $sql = ($filter != $ALL) ? "SELECT * FROM grades WHERE Session=$filter" : "SELECT * FROM grades";
+    return $cn->query($sql);
 }
-$rs = $cn->query($sql);
 
+?>
 
+<?php
+$filter = $_GET[$FILTER_SESSION] ?? $ALL;
+
+if (isset($_GET[$DELETE])) {
+    handleDelete($filter);
+}
+
+$rs = getFilteredGrades($filter);
 ?>
 
 <?php if ($sessions != 0): ?>
