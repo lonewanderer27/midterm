@@ -66,7 +66,7 @@ $rs = getFilteredGrades($filter);
     </div>
 
     <!-- Grade Table -->
-    <table class="table table-striped table-hover" id="<?= $GRADES_TABLE ?>">
+    <table class="table table-striped table-hover rounded-4" id="<?= $GRADES_TABLE ?>">
         <thead>
         <tr>
             <th>No</th>

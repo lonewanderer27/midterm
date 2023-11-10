@@ -47,7 +47,7 @@ function renderGradeForm($subject, $section_amt, $student_amt)
                             <td>
                                 <div class="input-group">
                                     <span class="input-group-text">Grade for <?= $student_name ?></span>
-                                    <input class="form-control" type="number" required />
+                                    <input name="<?= $student_name ?>" class="form-control" type="number" required />
                                 </div>
                             </td>
                         </tr>
