@@ -45,12 +45,12 @@ $selectedSession = $_GET['filter_session'] ?? $ALL;
 $scores = fetchExamScores($selectedSession);
 
 if ($sessions != 0): ?>
-    <div class="my-3">
+    <div class="my-5">
         <h2>
-            Statistics Summary for
+            Summary for
             <?= ($selectedSession == $ALL) ? 'all sessions' : "Session $selectedSession" ?>
         </h2>
-        <table class="table">
+        <table class="table table-striped table-hover">
             <thead>
             <tr>
                 <th>Section</th>

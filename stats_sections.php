@@ -36,9 +36,9 @@ $lowest_score = fetchSingleValue("SELECT MIN(Grade) FROM grades");
 ?>
 
 <?php if ($sessions != 0): ?>
-    <div class="my-3">
-        <h2>Statistics Summary for all sections</h2>
-        <table class="table">
+    <div class="my-5">
+        <h2>Statistics for all sections</h2>
+        <table class="table table-striped table-hover">
             <thead>
             <tr>
                 <th>Name</th>

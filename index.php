@@ -45,16 +45,16 @@ $selected_session = $_GET[$SELECTED_SESSION] ?? $ALL;
 <h1>Grading System</h1>
 
 <!-- Generate grade submission text boxes -->
-<form action="/" method="GET" class="d-flex my-3">
-    <input class="form-control me-2" type="text" name="<?= $SUBJECT ?>" placeholder="Enter subject name"
+<form action="/" method="GET" class="d-flex flex-column my-3">
+    <input class="form-control mb-2" type="text" name="<?= $SUBJECT ?>" placeholder="Enter subject name"
            value="<?= $subject ?>" required>
-    <input class="form-control me-2" min="1" type="number" name="<?= $SECTION_AMT ?>"
+    <input class="form-control mb-2" min="1" type="number" name="<?= $SECTION_AMT ?>"
            placeholder="Enter number of sections"
            value="<?= $section_amt ?>" required>
-    <input class="form-control me-2" min="1" type="number" name="<?= $STUDENT_AMT ?>"
+    <input class="form-control mb-2" min="1" type="number" name="<?= $STUDENT_AMT ?>"
            placeholder="Enter number of students per section"
            value="<?= $student_amt ?>" required>
-    <button class="btn btn-primary" type="submit">GENERATE</button>
+    <button class="btn btn-dark" type="submit">GENERATE</button>
 </form>
 
 <?php include "add_grade.php" ?>

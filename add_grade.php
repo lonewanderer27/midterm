@@ -25,13 +25,14 @@ function renderGradeForm($subject, $section_amt, $student_amt)
 {
     global $SUBMIT_GRADES;
     if (isset($subject) && isset($section_amt) && isset($student_amt)): ?>
-        <form method="POST" class="my-3">
-            <table class="table">
+        <form method="POST" class="my-5">
+            <table class="table table-striped table-hover">
                 <thead>
                 <tr>
-                    <td>Student name</td>
-                    <td>Subject</td>
-                    <td>Grade</td>
+                    <th>Student Name</th>
+                    <th>Subject</th>
+                    <th>Grade</th>
+                </tr>
                 </thead>
                 <?php for ($i = 1; $i <= $section_amt; $i++): ?>
                     <?php for ($j = 1; $j <= $student_amt; $j++): ?>
@@ -44,18 +45,21 @@ function renderGradeForm($subject, $section_amt, $student_amt)
                                 <span><?= $subject ?></span>
                             </td>
                             <td>
-                                <label>
-                                    <input class="form-control" type="number" required name='<?= $student_name ?>'
-                                           placeholder="Grade for <?= $student_name ?>" max="100" MAXLENGTH="3">
-                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">Grade for <?= $student_name ?></span>
+                                    <input class="form-control" type="number" required />
+                                </div>
                             </td>
                         </tr>
                     <?php endfor; ?>
                 <?php endfor; ?>
             </table>
-            <input name="<?= $SUBMIT_GRADES ?>" style="display: none" value="true">
-            <button class="btn btn-primary" type="submit">SAVE GRADES</button>
+            <input class="" name="<?= $SUBMIT_GRADES ?>" style="display: none" value="true">
+            <div class="d-grid">
+                <button class="btn btn-success" type="submit">SAVE GRADES</button>
+            </div>
         </form>
+
     <?php endif;
 }
 
